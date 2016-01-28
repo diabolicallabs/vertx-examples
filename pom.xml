@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.diabolicallabs</groupId>
+    <artifactId>vertx-examples</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0</version>
+
+    <properties>
+        <vertx.version>3.2.0</vertx.version>
+        <hazelcast.version>3.4</hazelcast.version>
+    </properties>
+
+    <modules>
+        <module>mongodb-examples</module>
+    </modules>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- Languages -->
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-lang-js</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-lang-groovy</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-lang-ruby</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-lang-ceylon</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- Other Vert.x support -->
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-unit</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-hazelcast</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-rx-java</artifactId>
+            <version>${vertx.version}</version>
+        </dependency>
+
+        <!-- Non-Vert.x support -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+
+    </dependencies>
+</project>
