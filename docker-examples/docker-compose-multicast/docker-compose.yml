@@ -1,0 +1,6 @@
+vert1:
+  build: ./vert1
+  hostname: vert1
+vert2:
+  build: ./vert2
+  hostname: vert2

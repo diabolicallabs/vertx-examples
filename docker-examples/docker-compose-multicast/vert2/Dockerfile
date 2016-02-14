@@ -1,0 +1,11 @@
+FROM vertx/vertx3
+
+ENV VERTICLE_FILE vert.groovy
+ENV VERTICLE_HOME /usr/verticles
+
+COPY $VERTICLE_FILE $VERTICLE_HOME/
+
+WORKDIR $VERTICLE_HOME
+
+ENTRYPOINT ["sh", "-c"]
+CMD ["vertx run $VERTICLE_FILE --cluster"]
