@@ -1,0 +1,22 @@
+version: "3.1"
+
+services:
+
+  zookeeper:
+    image: zookeeper
+
+  vert1:
+    image: diabolicallabs/hazelcast-swarm:${VERSION}
+    environment:
+    - SEND_ADDRESS="vert2"
+    - RECEIVE_ADDRESS="vert1"
+    depends_on:
+      - zookeeper
+
+  vert2:
+    image: diabolicallabs/hazelcast-swarm:${VERSION}
+    environment:
+    - SEND_ADDRESS="vert1"
+    - RECEIVE_ADDRESS="vert2"
+    depends_on:
+    - zookeeper
