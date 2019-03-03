@@ -24,6 +24,5 @@ public interface Service {
   }
 
   void repeat(String text, Handler<AsyncResult<String>> handler);
-  void reverse(String text, Handler<AsyncResult<String>> handler);
 
 }

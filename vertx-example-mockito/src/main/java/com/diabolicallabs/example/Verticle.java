@@ -27,17 +27,25 @@ public class Verticle extends AbstractVerticle {
       .setAddress(Service.DEFAULT_ADDRESS)
       .register(Service.class, new ServiceImpl());
 
-    vertx.eventBus().<String>consumer("example.service", handler -> {
+    vertx.eventBus().<String>consumer("example.service.repeat", handler -> {
       String text = handler.body();
       exampleService.repeat(text, stringAsyncResult -> {
-        handler.reply(stringAsyncResult.result());
+        if (stringAsyncResult.succeeded()) {
+          handler.reply(stringAsyncResult.result());
+        } else {
+          handler.fail(-1, stringAsyncResult.cause().getMessage());
+        }
       });
     });
 
-    vertx.eventBus().<String>consumer("example.service.proxy", handler -> {
+    vertx.eventBus().<String>consumer("example.service.proxy.repeat", handler -> {
       String text = handler.body();
       exampleServiceProxy.repeat(text, stringAsyncResult -> {
-        handler.reply(stringAsyncResult.result());
+        if (stringAsyncResult.succeeded()) {
+          handler.reply(stringAsyncResult.result());
+        } else {
+          handler.fail(-1, stringAsyncResult.cause().getMessage());
+        }
       });
     });
 
@@ -46,13 +54,11 @@ public class Verticle extends AbstractVerticle {
 
   public Verticle setExampleService(Service exampleService) {
     this.exampleService = exampleService;
-    System.out.println("Finished with setExampleService");
     return this;
   }
 
   public Verticle setExampleServiceProxy(Service exampleServiceProxy) {
     this.exampleServiceProxy = exampleServiceProxy;
-    System.out.println("Finished with setExampleServiceProxy");
     return this;
   }
 }
