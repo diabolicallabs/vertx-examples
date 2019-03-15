@@ -19,6 +19,8 @@ import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 import org.mockito.stubbing.Answer;
 
+import java.lang.reflect.Field;
+
 @RunWith(io.vertx.ext.unit.junit.VertxUnitRunner.class)
 public class ServiceTest {
 
@@ -40,7 +42,20 @@ public class ServiceTest {
     Async async = context.async();
 
     rule.vertx().deployVerticle(exampleVerticle, stringAsyncResult -> {
-      exampleVerticle.setExampleService(exampleService);
+
+      /*
+       * Mockito will inject the mocks into the Verticle when it is created. Unfortunately,
+       * Vert.x will call the init and start methods after that when the Verticle is
+       * deployed. So, we need to re-set the services back to the mocks after deployment
+       * with reflection.
+       */
+      try {
+        Field exampleServiceProxyField = Verticle.class.getDeclaredField("exampleService");
+        exampleServiceProxyField.setAccessible(true);
+        exampleServiceProxyField.set(exampleVerticle, exampleService);
+      } catch (NoSuchFieldException | IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
 
       Mockito.doAnswer((Answer<Void>) invocation -> {
         String parameter = invocation.getArgument(0);
@@ -72,6 +87,9 @@ public class ServiceTest {
     Async async = context.async();
     rule.vertx().eventBus().send("example.service.repeat", "goat", result -> {
       context.assertTrue(result.succeeded());
+      //The normal service just repeats the parameter back as a reply. The mocked service
+      //will return the parameter translated to Hawaiian. If we get back Hawaiian, then
+      //the mocked service was called.
       context.assertEquals("kao", result.result().body());
       async.complete();
     });
@@ -83,6 +101,9 @@ public class ServiceTest {
     Async async = context.async();
     rule.vertx().eventBus().send("example.service.repeat", "eel", result -> {
       context.assertTrue(result.succeeded());
+      //The normal service just repeats the parameter back as a reply. The mocked service
+      //will return the parameter translated to Hawaiian. If we get back Hawaiian, then
+      //the mocked service was called.
       context.assertEquals("puhi", result.result().body());
       async.complete();
     });
@@ -93,6 +114,8 @@ public class ServiceTest {
 
     Async async = context.async();
     rule.vertx().eventBus().send("example.service.repeat", "mongoose", result -> {
+      //"mongoose" was not one of the parameters we accounted for in the mocked service.
+      //In this case the mocked service should return a failure.
       context.assertFalse(result.succeeded());
       context.assertEquals("mongoose", result.cause().getMessage());
       async.complete();
@@ -104,6 +127,8 @@ public class ServiceTest {
 
     Async async = context.async();
     rule.vertx().eventBus().send("example.service.proxy.repeat", "goat", result -> {
+      //In this test case we are trying the proxied service which is not mocked.
+      //We should get back the parameter unchanged.
       context.assertTrue(result.succeeded());
       context.assertEquals("goat", result.result().body());
       async.complete();

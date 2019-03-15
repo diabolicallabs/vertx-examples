@@ -8,7 +8,6 @@ public class ServiceImpl implements Service {
 
   @Override
   public void repeat(String text, Handler<AsyncResult<String>> handler) {
-    System.out.println("Native 'repeat' method called with: " + text);
     handler.handle(Future.succeededFuture(text));
   }
 
