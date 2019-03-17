@@ -12,7 +12,8 @@ import io.vertx.core.Vertx;
 public interface Service {
 
   /**
-   * This is the default address that the service proxy will listen to for events on the Event Bus
+   * This is the default address that the service proxy will
+   * listen to for events on the Event Bus
    */
   String DEFAULT_ADDRESS = "service.example";
 
